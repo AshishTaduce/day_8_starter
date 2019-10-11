@@ -147,16 +147,16 @@ class _InputPageState extends State<InputPage> {
                   ),
                   SliderTheme(
                    data: SliderThemeData(thumbColor: Colors.pink,
-                       
-                       overlayColor: Colors.pinkAccent ),
+                       overlayColor: Colors.pinkAccent.withAlpha(100),
+                     activeTrackColor: activeText,
+                     inactiveTrackColor: inactiveText,
+                   ),
                     child: Slider(
 
-                        value: height.toDouble(),
+                        value: height.roundToDouble(),
                         min: 110,
                         max: 210,
-                        divisions: 80,
-                        activeColor: activeText,
-                        inactiveColor: inactiveText,
+                        divisions: 100,
                         onChanged: (double newValue) {
                           setState(() {
                             height = newValue;
