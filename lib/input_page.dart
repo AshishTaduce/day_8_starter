@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'round button.dart';
+import 'results_page.dart';
 
 class InputPage extends StatefulWidget {
   @override
@@ -11,6 +13,17 @@ enum Gender {
   female,
 }
 
+const TextStyle kNumberLabelTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 36,
+  fontWeight: FontWeight.bold,
+);
+const TextStyle kLabelTextStyle = TextStyle(
+  color: Color.fromARGB(150, 255, 255, 255),
+  fontSize: 28,
+  //fontWeight: FontWeight.bold,
+);
+
 class _InputPageState extends State<InputPage> {
   Gender gender; // Male = 0, Female = 1
   Color activeCardColor = Color(0xFF1D1F31);
@@ -18,9 +31,13 @@ class _InputPageState extends State<InputPage> {
   Color activeText = Colors.white;
   Color inactiveText = Colors.white.withAlpha(150);
   double height = 183;
+  double weight = 78;
+  double age = 28;
+  double bmi = 21.2;
 
   @override
   Widget build(BuildContext context) {
+    var textHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text('BMI CALCULATOR'),
@@ -40,7 +57,8 @@ class _InputPageState extends State<InputPage> {
                         Icon(
                           FontAwesomeIcons.mars,
                           size: 100,
-                          color: gender == Gender.male ? activeText : inactiveText,
+                          color:
+                              gender == Gender.male ? activeText : inactiveText,
                         ),
                         SizedBox(
                           height: 10,
@@ -76,7 +94,9 @@ class _InputPageState extends State<InputPage> {
                         Icon(
                           FontAwesomeIcons.venus,
                           size: 100,
-                          color: gender == Gender.female ? activeText : inactiveText,
+                          color: gender == Gender.female
+                              ? activeText
+                              : inactiveText,
                         ),
                         SizedBox(
                           height: 10,
@@ -116,10 +136,7 @@ class _InputPageState extends State<InputPage> {
                   Text(
                     'Height',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: inactiveText,
-                      fontSize: 28,
-                    ),
+                    style: kLabelTextStyle,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -129,11 +146,7 @@ class _InputPageState extends State<InputPage> {
                       Text(
                         '$height',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: activeText,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: kNumberLabelTextStyle,
                       ),
                       Text(
                         'cm',
@@ -146,13 +159,13 @@ class _InputPageState extends State<InputPage> {
                     ],
                   ),
                   SliderTheme(
-                   data: SliderThemeData(thumbColor: Colors.pink,
-                       overlayColor: Colors.pinkAccent.withAlpha(100),
-                     activeTrackColor: activeText,
-                     inactiveTrackColor: inactiveText,
-                   ),
+                    data: SliderThemeData(
+                      thumbColor: Colors.pink,
+                      overlayColor: Colors.pinkAccent.withAlpha(100),
+                      activeTrackColor: activeText,
+                      inactiveTrackColor: inactiveText,
+                    ),
                     child: Slider(
-
                         value: height.roundToDouble(),
                         min: 110,
                         max: 210,
@@ -174,14 +187,125 @@ class _InputPageState extends State<InputPage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ReusableCard(),
+                  child: ReusableCard(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: textHeight * 0.02,
+                        ),
+                        Text(
+                          'WEIGHT',
+                          style: kLabelTextStyle,
+                        ),
+                        Text(
+                          '$weight',
+                          style: kNumberLabelTextStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            RoundButton(
+                              icon: Icon(
+                                Icons.remove,
+                                size: 32,
+                              ),
+                              callback: () {
+                                setState(() {
+                                  weight--;
+                                });
+                              },
+                            ),
+                            RoundButton(
+                              icon: Icon(
+                                Icons.add,
+                                size: 32,
+                              ),
+                              callback: () {
+                                setState(() {
+                                  weight++;
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 Expanded(
-                  child: ReusableCard(),
+                  child: ReusableCard(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: textHeight * 0.02,
+                        ),
+                        Text(
+                          'AGE',
+                          style: kLabelTextStyle,
+                        ),
+
+                        Text(
+                          '$age',
+                          style: kNumberLabelTextStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            RoundButton(
+                              icon: Icon(
+                                Icons.remove,
+                                size: 32,
+                              ),
+                              callback: () {
+                                setState(() {
+                                  age--;
+                                });
+                              },
+                            ),
+                            RoundButton(
+                              icon: Icon(
+                                Icons.add,
+                                size: 32,
+                              ),
+                              callback: () {
+                                setState(() {
+                                  age++;
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
           ),
+          Container(
+            color: Colors.pinkAccent,
+            width: double.infinity,
+            height: textHeight * 0.08,
+            child: FlatButton(
+              onPressed: (){
+                print('BMI found');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ResultPage('$weight',bmi)));
+              },
+              child: Text(
+                'CALCULATE YOUR BMI',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
